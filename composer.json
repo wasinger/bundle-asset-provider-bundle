@@ -1,5 +1,6 @@
 {
     "name": "wasinger/bundle-asset-provider-bundle",
+    "description": "Include assets from bundles into webpack encore builds",
     "type": "symfony-bundle",
     "license": "MIT",
     "authors": [
