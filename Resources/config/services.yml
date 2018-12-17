@@ -4,5 +4,10 @@ services:
             - '@filesystem'
         tags:
             - 'console.command'
+    Wasinger\BundleAssetProviderBundle\Command\CheckAssetDependenciesCommand:
+        arguments:
+            - '@filesystem'
+        tags:
+            - 'console.command'
 
 

@@ -64,7 +64,8 @@ EOT
         $project_deps = $json['dependencies'];
         $project_depnames = \array_keys($project_deps);
         $rows = [];
-
+        $exitCode = 0;
+        $foundPackage = false;
         /** @var BundleInterface $bundle */
         foreach ($kernel->getBundles() as $bundle) {
             if (!\file_exists($package_json = $bundle->getPath().'/package.json')) {
@@ -78,22 +79,32 @@ EOT
 
             foreach ($bundle_deps as $dep_name => $dep_version) {
                 if (!in_array($dep_name, $project_depnames)) {
-                    $rows[] = array(sprintf('<fg=red;options=bold>%s</>', '\\' === \DIRECTORY_SEPARATOR ? 'MISSING' : "\xE2\x9C\x98" /* HEAVY BALLOT X (U+2718) */), $message, $dep_name);
+                    $rows[] = array(sprintf('<fg=red;options=bold>%s</>', '\\' === \DIRECTORY_SEPARATOR ? 'MISSING' : "\xE2\x9C\x98" /* HEAVY BALLOT X (U+2718) */), $message, $dep_name, $dep_version, '<fg=red;>Missing</>');
+                    $exitCode = 1;
+                } else {
+                    if (OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
+                        $rows[] = array(
+                            sprintf('<fg=green;options=bold>%s</>',
+                                '\\' === \DIRECTORY_SEPARATOR ? 'OK' : "\xE2\x9C\x94" /* HEAVY CHECK MARK (U+2714) */),
+                            $message,
+                            $dep_name,
+                            $dep_version,
+                            $project_deps[$dep_name]
+                        );
+                    }
+                    $foundPackage = true;
                 }
             }
         }
 
         if ($rows) {
-            $io->table(array('', 'Bundle', 'NPM Package'), $rows);
+            $io->table(array('', 'Bundle', 'NPM Package', 'req. Version', 'Project version'), $rows);
         }
 
         if (0 !== $exitCode) {
-            $io->error('Some errors occurred while installing assets.');
+            $io->error('Some dependency requirements are not met.');
         } else {
-            if ($copyUsed) {
-                $io->note('Some assets were installed via copy. If you make changes to these assets you have to run this command again.');
-            }
-            $io->success($rows ? 'All assets were successfully installed.' : 'No assets were provided by any bundle.');
+            $io->success($foundPackage ? 'All required dependencies are listed in your package.json.' : 'No package.json was provided by any bundle.');
         }
 
         return $exitCode;
