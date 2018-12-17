@@ -1,0 +1,19 @@
+{
+    "name": "wasinger/bundle-asset-provider-bundle",
+    "type": "symfony-bundle",
+    "authors": [
+        {
+            "name": "Christoph Singer",
+            "email": "singer@webagentur72.de"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Wasinger\\BundleAssetProviderBundle\\": ""
+        }
+    },
+    "require": {
+        "php": "^7.1.3",
+        "symfony/console": "*",
+    }
+}

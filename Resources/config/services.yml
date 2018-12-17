@@ -1,0 +1,8 @@
+services:
+    Wasinger\BundleAssetProviderBundle\Command\AssetsSourcesCommand:
+        arguments:
+            - '@filesystem'
+        tags:
+            - 'console.command'
+
+
