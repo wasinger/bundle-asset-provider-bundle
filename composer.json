@@ -1,6 +1,7 @@
 {
     "name": "wasinger/bundle-asset-provider-bundle",
     "type": "symfony-bundle",
+    "license": "MIT",
     "authors": [
         {
             "name": "Christoph Singer",
