@@ -7,7 +7,7 @@
             "email": "singer@webagentur72.de"
         }
     ],
-    "autoload": {cd
+    "autoload": {
         "psr-4": {
             "Wasinger\\BundleAssetProviderBundle\\": ""
         }
